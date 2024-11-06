@@ -17,13 +17,23 @@ public class EntryController {
     @Autowired
     private EntryService entryService;
 
-    @PostMapping("/add")
-    public ResponseEntity<Entry> createEntry(@RequestBody Entry entry){
+    @PostMapping("/add/{username}")
+    public ResponseEntity<Entry> createEntry(@RequestBody Entry entry, @PathVariable String username){
         try {
-            return new ResponseEntity<>(entryService.createEntry(entry),HttpStatus.CREATED);
+            return new ResponseEntity<>(entryService.createEntry(entry, username),HttpStatus.CREATED);
         }catch (Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/get-all/{username}")
+    public ResponseEntity<List<Entry>> getAllEntryOfUser(@PathVariable String username){
+        try {
+            return new ResponseEntity<>(entryService.getAllEntryOfUser(username),HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
@@ -38,9 +48,9 @@ public class EntryController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Entry> getEntryById(@PathVariable ObjectId id){
+    public ResponseEntity<Entry> getEntryById(@PathVariable ObjectId id, @PathVariable String username){
         try {
-            return new ResponseEntity<>(entryService.getEntryById(id),HttpStatus.OK);
+            return new ResponseEntity<>(entryService.getEntryById(id, username),HttpStatus.OK);
         }catch (Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -48,9 +58,9 @@ public class EntryController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> deleteEntryById(@PathVariable ObjectId id){
+    public ResponseEntity<Boolean> deleteEntryById(@PathVariable ObjectId id, @PathVariable String username){
         try {
-            return new ResponseEntity<>(entryService.deleteEntryById(id),HttpStatus.OK);
+            return new ResponseEntity<>(entryService.deleteEntryById(id, username),HttpStatus.OK);
         }catch (Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
@@ -58,9 +68,9 @@ public class EntryController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Entry> updateEntry(@PathVariable ObjectId id, @RequestBody Entry entry){
+    public ResponseEntity<Entry> updateEntry(@PathVariable ObjectId id, @RequestBody Entry entry, @PathVariable String username){
         try {
-            return new ResponseEntity<>(entryService.updateEntry(id, entry),HttpStatus.CREATED);
+            return new ResponseEntity<>(entryService.updateEntry(id, entry, username),HttpStatus.CREATED);
         }catch (Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
