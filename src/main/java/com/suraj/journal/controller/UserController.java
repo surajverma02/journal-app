@@ -1,7 +1,7 @@
 package com.suraj.journal.controller;
 
-import com.suraj.journal.entity.Entry;
-import com.suraj.journal.service.EntryService;
+import com.suraj.journal.entity.User;
+import com.suraj.journal.service.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/journal")
-public class EntryController {
+@RequestMapping("/user")
+public class UserController {
 
     @Autowired
-    private EntryService entryService;
+    private UserService userService;
 
     @PostMapping("/add")
-    public ResponseEntity<Entry> createEntry(@RequestBody Entry entry){
+    public ResponseEntity<User> createUser(@RequestBody User user){
         try {
-            return new ResponseEntity<>(entryService.createEntry(entry),HttpStatus.CREATED);
+            return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
         }catch (Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -28,9 +28,9 @@ public class EntryController {
     }
 
     @GetMapping("/get-all")
-    public ResponseEntity<List<Entry>> getAllEntry(){
+    public ResponseEntity<List<User>> getAllUser(){
         try {
-            return new ResponseEntity<>(entryService.getAllEntry(),HttpStatus.OK);
+            return new ResponseEntity<>(userService.getAllUser(),HttpStatus.OK);
         }catch (Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -38,9 +38,9 @@ public class EntryController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Entry> getEntryById(@PathVariable ObjectId id){
+    public ResponseEntity<User> getUserById(@PathVariable ObjectId id){
         try {
-            return new ResponseEntity<>(entryService.getEntryById(id),HttpStatus.OK);
+            return new ResponseEntity<>(userService.getUserById(id),HttpStatus.OK);
         }catch (Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -48,9 +48,9 @@ public class EntryController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> deleteEntryById(@PathVariable ObjectId id){
+    public ResponseEntity<Boolean> deleteUserById(@PathVariable ObjectId id){
         try {
-            return new ResponseEntity<>(entryService.deleteEntryById(id),HttpStatus.OK);
+            return new ResponseEntity<>(userService.deleteUserById(id),HttpStatus.OK);
         }catch (Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
@@ -58,9 +58,9 @@ public class EntryController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Entry> updateEntry(@PathVariable ObjectId id, @RequestBody Entry entry){
+    public ResponseEntity<User> updateUser(@PathVariable ObjectId id, @RequestBody User user){
         try {
-            return new ResponseEntity<>(entryService.updateEntry(id, entry),HttpStatus.CREATED);
+            return new ResponseEntity<>(userService.updateUser(id, user),HttpStatus.CREATED);
         }catch (Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -2,6 +2,7 @@ package com.suraj.journal.service;
 
 import com.suraj.journal.entity.Entry;
 import com.suraj.journal.repository.EntryRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +15,15 @@ public class EntryService {
     @Autowired
     private EntryRepository entryRepository;
 
-    public Entry addEntry(Entry entry){
-        return entryRepository.insert(entry);
+    public Entry createEntry(Entry entry){
+        return entryRepository.save(entry);
     }
 
     public List<Entry> getAllEntry(){
         return entryRepository.findAll();
     }
 
-    public Entry getEntryById(Long id){
+    public Entry getEntryById(ObjectId id){
         try {
             Optional<Entry> entryData = entryRepository.findById(id);
             if (entryData.isPresent()) {
@@ -36,7 +37,7 @@ public class EntryService {
         }
     }
 
-    public Boolean deleteEntry(Long id){
+    public Boolean deleteEntryById(ObjectId id){
         try {
             entryRepository.deleteById(id);
             return true;
@@ -46,7 +47,7 @@ public class EntryService {
         }
     }
 
-    public Entry updateEntry(Long id, Entry entry){
+    public Entry updateEntry(ObjectId id, Entry entry){
         try {
             Optional<Entry> entryData = entryRepository.findById(id);
             if (entryData.isPresent()){

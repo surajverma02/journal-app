@@ -1,5 +1,8 @@
 package com.suraj.journal.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,12 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 
     @GetMapping
-    public String home(){
-        return "Okay";
+    public ResponseEntity<String> home(){
+        return new ResponseEntity<>("Okay", HttpStatus.OK);
     }
 
     @GetMapping("/health")
-    public String healthCheck(){
-        return "It's running good!";
+    public ResponseEntity<String> healthCheck(){
+        return new ResponseEntity<>("It's running good!", HttpStatus.OK);
     }
 }
