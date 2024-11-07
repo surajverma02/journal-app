@@ -47,7 +47,7 @@ public class EntryController {
         }
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/get/{id}/{username}")
     public ResponseEntity<Entry> getEntryById(@PathVariable ObjectId id, @PathVariable String username){
         try {
             return new ResponseEntity<>(entryService.getEntryById(id, username),HttpStatus.OK);
@@ -57,7 +57,7 @@ public class EntryController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}/{username}")
     public ResponseEntity<Boolean> deleteEntryById(@PathVariable ObjectId id, @PathVariable String username){
         try {
             return new ResponseEntity<>(entryService.deleteEntryById(id, username),HttpStatus.OK);
@@ -67,7 +67,7 @@ public class EntryController {
         }
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update/{id}/{username}")
     public ResponseEntity<Entry> updateEntry(@PathVariable ObjectId id, @RequestBody Entry entry, @PathVariable String username){
         try {
             return new ResponseEntity<>(entryService.updateEntry(id, entry, username),HttpStatus.CREATED);
