@@ -6,6 +6,8 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,50 +19,24 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/add")
-    public ResponseEntity<User> createUser(@RequestBody User user){
+    @DeleteMapping("/delete")
+    public ResponseEntity<Boolean> deleteUserByUsername(){
         try {
-            return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/get-all")
-    public ResponseEntity<List<User>> getAllUser(){
-        try {
-            return new ResponseEntity<>(userService.getAllUser(),HttpStatus.OK);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-    }
-
-    @GetMapping("/get/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable ObjectId id){
-        try {
-            return new ResponseEntity<>(userService.getUserById(id),HttpStatus.OK);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> deleteUserById(@PathVariable ObjectId id){
-        try {
-            return new ResponseEntity<>(userService.deleteUserById(id),HttpStatus.OK);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            return new ResponseEntity<>(userService.deleteUserByUsername(username),HttpStatus.OK);
         }catch (Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable ObjectId id, @RequestBody User user){
+    @PutMapping("/update")
+    public ResponseEntity<User> updateUser(@RequestBody User user){
         try {
-            return new ResponseEntity<>(userService.updateUser(id, user),HttpStatus.CREATED);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            return new ResponseEntity<>(userService.updateUser(username, user),HttpStatus.CREATED);
         }catch (Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

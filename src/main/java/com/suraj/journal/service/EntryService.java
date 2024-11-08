@@ -6,6 +6,7 @@ import com.suraj.journal.repository.EntryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,17 +20,18 @@ public class EntryService {
     @Autowired
     private UserService userService;
 
+    @Transactional
     public Entry createEntry(Entry entry, String username){
         try {
             User user = userService.getUserByUsername(username);
             Entry savedEntry = entryRepository.save(entry);
             user.getEntries().add(savedEntry);
-            userService.createUser(user);
+            userService.saveUser(user);
             return entryRepository.save(entry);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
-            return null;
+            throw new RuntimeException("Error while creating entry!");
         }
     }
 
@@ -65,6 +67,7 @@ public class EntryService {
         }
     }
 
+    @Transactional
     public Boolean deleteEntryById(ObjectId id, String username){
         try {
             Optional<Entry> entryData = entryRepository.findById(id);
@@ -72,7 +75,7 @@ public class EntryService {
                 User user = userService.getUserByUsername(username);
                 if(user.getEntries().contains(entryData.get())){
                     user.getEntries().remove(entryData.get());
-                    userService.createUser(user);
+                    userService.saveUser(user);
                     entryRepository.deleteById(id);
                     return true;
                 }
@@ -80,10 +83,11 @@ public class EntryService {
             throw new RuntimeException("Unauthorized operation!");
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return false;
+            throw new RuntimeException("Error while creating entry!");
         }
     }
 
+    @Transactional
     public Entry updateEntry(ObjectId id, Entry entry, String username){
         try {
             Optional<Entry> entryData = entryRepository.findById(id);
@@ -100,7 +104,7 @@ public class EntryService {
         }
         catch (Exception e){
             System.out.println(e.getMessage());
-            return null;
+            throw new RuntimeException("Error while creating entry!");
         }
     }
 }
